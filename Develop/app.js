@@ -48,14 +48,13 @@ function promptUser() {
       employeeData.push(data.name, data.id, data.email);
 
       if (data.role === "Intern") {
-        school = inquirer.prompt([
+        inquirer.prompt([
           {
             type: "input",
             name: "school",
             message: "What school do you attend?",
           },
         ]);
-        createIntern();
       } else if (data.role === "Manager") {
         inquirer.prompt([
           {
