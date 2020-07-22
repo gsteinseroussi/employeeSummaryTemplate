@@ -16,56 +16,67 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 const employeeList = [];
-async function questions(answers) {
-  const answer = await promptUser();
+const employeeData = [];
+let school;
 
-  if (answer.role === "Intern") {
-    return inquirer.prompt([
-      {
-        type: "input",
-        name: "school",
-        message: "What school do you attend?",
-      },
-    ]);
-  } else if (answer.role === "Manager") {
-    return inquirer.prompt([
-      {
-        type: "input",
-        name: "officeNumber",
-        message: "What is your office number?",
-      },
-    ]);
-  } else if (answer.role === "Engineer") {
-    return inquirer.prompt([
-      {
-        type: "input",
-        name: "github",
-        message: "What is your github url?",
-      },
-    ]);
-  }
-}
 function promptUser() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your name?",
-    },
-    {
-      type: "input",
-      name: "id",
-      message: "What is your id number?",
-    },
-    {
-      type: "rawlist",
-      name: "role",
-      message: "Which of the following describes your role?",
-      choices: ["Intern", "Engineer", "Manager"],
-    },
-  ]);
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "What is your name?",
+      },
+      {
+        type: "input",
+        name: "id",
+        message: "What is your id number?",
+      },
+      {
+        type: "input",
+        name: "email",
+        message: "What is your email address?",
+      },
+      {
+        type: "rawlist",
+        name: "role",
+        message: "Which of the following describes your role?",
+        choices: ["Intern", "Engineer", "Manager"],
+      },
+    ])
+    .then(function (data) {
+      employeeData.push(data.name, data.id, data.email);
+
+      if (data.role === "Intern") {
+        school = inquirer.prompt([
+          {
+            type: "input",
+            name: "school",
+            message: "What school do you attend?",
+          },
+        ]);
+        createIntern();
+      } else if (data.role === "Manager") {
+        inquirer.prompt([
+          {
+            type: "input",
+            name: "officeNumber",
+            message: "What is your office number?",
+          },
+        ]);
+      } else if (data.role === "Engineer") {
+        inquirer.prompt([
+          {
+            type: "input",
+            name: "github",
+            message: "What is your github url?",
+          },
+        ]);
+      }
+    });
 }
 
+promptUser();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
